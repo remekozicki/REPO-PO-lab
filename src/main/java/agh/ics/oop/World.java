@@ -5,14 +5,12 @@ import static java.lang.System.out;
 public class World {
     public static void main(String[] args) {
 
+        MoveDirection[] directions = new OptionsParser().parse(args);
+        IWorldMap map = new RectangularMap(10, 5);
+        Vector2d[] positions = { new Vector2d(2,2), new Vector2d(3,4) };
+        IEngine engine = new SimulationEngine(directions, map, positions);
+        engine.run();
 
-        OptionsParser parser = new OptionsParser();
-        MoveDirection[] newArray = parser.parse(args);
-        Animal zwierze = new Animal();
-        for (MoveDirection moveDirection : newArray) {
-            out.println(zwierze);
-            zwierze.move(moveDirection);
-        }
 
 
     }
