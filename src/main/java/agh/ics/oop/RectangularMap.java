@@ -4,15 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class RectangularMap implements IWorldMap{
+public class RectangularMap extends AbstractWorldMap implements IWorldMap{
 
     private int width;
     private int height;
 
     private Vector2d upperRight;
     private final Vector2d lowerLeft = new Vector2d(0, 0);
-
-    private Map<Vector2d,Animal> mapHashMap = new HashMap<>();
 
     public RectangularMap(){
         this.width = 5;
@@ -36,32 +34,30 @@ public class RectangularMap implements IWorldMap{
 
     @Override
     public boolean place(Animal animal) {
-        if(animal == null) return false;
-        if(animal.getVectorCoordinates() == null) return false;
-        if(isOccupied(animal.getVectorCoordinates())) return false;
-        if(!canMoveTo(animal.getVectorCoordinates())) return false;
 
-        if(animal.getPeviousVectorCoordinates() != null){
-            this.mapHashMap.remove(animal.getPeviousVectorCoordinates());
+        if(isOccupied(animal.getPosition())) return false;
+        if(!canMoveTo(animal.getPosition())) return false;
+
+        if(animal.getPreviousPosition() != null){
+            this.mapHashMap.remove(animal.getPreviousPosition());
         }
-        this.mapHashMap.put(animal.getVectorCoordinates(),animal);
+//        System.out.println(mapHashMap);
+        this.mapHashMap.put(animal.getPosition(),animal);
+        System.out.println(mapHashMap);
+
 
         return true;
     }
-
-    @Override
-    public boolean isOccupied(Vector2d position) {
-        return mapHashMap.containsKey(position);
-    }
-
     @Override
     public Object objectAt(Vector2d position) {
         return this.mapHashMap.get(position);
     }
 
-    @Override
-    public String toString() {
-        MapVisualizer mapVisualizer = new MapVisualizer(this);
-        return mapVisualizer.draw(this.lowerLeft, this.upperRight);
+    public Vector2d lowerLeftDraw() {
+        return new Vector2d(0, 0);
+    }
+
+    public Vector2d upperRightDraw() {
+        return new Vector2d(this.width - 1, this.height - 1);
     }
 }

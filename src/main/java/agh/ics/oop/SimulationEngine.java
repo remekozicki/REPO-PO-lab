@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class SimulationEngine implements IEngine{
 
@@ -18,7 +17,7 @@ public class SimulationEngine implements IEngine{
             animalsList.add(new Animal(this.map, newPosition));
 
         for(Animal animal: animalsList){
-            if(this.map.canMoveTo(animal.getVectorCoordinates())){
+            if(this.map.canMoveTo(animal.getPosition())){
                 this.map.place(animal);
             }
 
@@ -29,8 +28,6 @@ public class SimulationEngine implements IEngine{
     public void run() {
         for(int i = 0; i < moveArray.length; i++){
             this.animalsList.get( i % animalsList.size()).move(moveArray[i]);
-            System.out.println("animal"+i % animalsList.size() +":" + this.animalsList.get( i % animalsList.size()).getVectorCoordinates()+
-                    this.animalsList.get( i % animalsList.size()).getMapPosition());
         }
     }
 }

@@ -1,42 +1,35 @@
 package agh.ics.oop;
 
-public class Animal{
+public class Animal extends AbstractWorldMapElement{
     
-    public MapDirection getMapPosition() {
-        return mapPosition;
+    public MapDirection getDirection() {
+        return direction;
     }
 
-    public Vector2d getPeviousVectorCoordinates() {
-        return peviousVectorCoordinates;
+    public Vector2d getPreviousPosition() {
+        return previousPosition;
+    }
+    public Vector2d getPosition() {
+        return this.position;
     }
 
-    public Vector2d getVectorCoordinates() {
-        return vectorCoordinates;
-    }
-
-
-    public IWorldMap getMap() {
-        return map;
-    }
-
-    private Vector2d peviousVectorCoordinates;
-    private MapDirection mapPosition = MapDirection.NORTH;
-    private Vector2d vectorCoordinates = new Vector2d(2, 2);
-
+    private Vector2d previousPosition;
+    private MapDirection direction = MapDirection.NORTH;
     private final IWorldMap map;
-
-    Animal(IWorldMap map){
+//never used
+    public Animal(IWorldMap map){
+        super(new Vector2d(2,2));
         this.map = map;
     }
-    Animal(IWorldMap map, Vector2d initialPosition) {
+    public Animal(IWorldMap map, Vector2d initialPosition) {
+        super(initialPosition);
         this.map = map;
-        this.vectorCoordinates = initialPosition;
     }
 
     @Override
     public String toString(){
 
-        String toPrint = switch (this.mapPosition){
+        String toPrint = switch (this.direction){
             case NORTH -> "N";
             case EAST -> "E";
             case WEST -> "W";
@@ -47,22 +40,22 @@ public class Animal{
 
     }
     boolean isAt(Vector2d position){
-        return position.equals(vectorCoordinates);
+        return position.equals(position);
     }
 
      void move(MoveDirection direction){
          switch (direction) {
-             case RIGHT -> this.mapPosition = this.mapPosition.next();
-             case LEFT -> this.mapPosition = this.mapPosition.previos();
+             case RIGHT -> this.direction = this.direction.next();
+             case LEFT -> this.direction = this.direction.previos();
              default -> {
                  Vector2d temp = switch (direction) {
-                     case FORWARD -> this.vectorCoordinates.add(mapPosition.toUnitVector());
-                     case BACKWARD -> this.vectorCoordinates.subtract(mapPosition.toUnitVector());
-                     default -> this.vectorCoordinates;
+                     case FORWARD -> this.position.add(this.direction.toUnitVector());
+                     case BACKWARD -> this.position.subtract(this.direction.toUnitVector());
+                     default -> this.position;
                  };
                  if(this.map.canMoveTo(temp)){
-                    this.peviousVectorCoordinates = this.vectorCoordinates;
-                    this.vectorCoordinates = temp;
+                    this.previousPosition = this.position;
+                    this.position = temp;
                     this.map.place(this);
                  }
              }
