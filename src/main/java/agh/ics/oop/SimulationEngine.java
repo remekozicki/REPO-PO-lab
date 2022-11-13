@@ -28,6 +28,7 @@ public class SimulationEngine implements IEngine{
     public void run() {
         for(int i = 0; i < moveArray.length; i++){
             this.animalsList.get( i % animalsList.size()).move(moveArray[i]);
+            System.out.println(map);
         }
     }
 }

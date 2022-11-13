@@ -14,17 +14,20 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
         this.maxGrassY = (int) Math.sqrt(numberOfGrass*10);
 
         for(int i = 0; i < numberOfGrass; i++){
+
             int x = ThreadLocalRandom.current().nextInt(0,this.maxGrassX+1);
             int y = ThreadLocalRandom.current().nextInt(0,this.maxGrassY+1);
 
             Vector2d grassPosition = new Vector2d(x,y);
+
             while (this.objectAt(grassPosition) != null){
+
                 x = ThreadLocalRandom.current().nextInt(0,this.maxGrassX+1);
                 y = ThreadLocalRandom.current().nextInt(0,this.maxGrassY+1);
                 grassPosition = new Vector2d(x,y);
             }
-            this.mapHashMap.put(grassPosition,new Grass(grassPosition));
 
+            this.mapHashMap.put(grassPosition,new Grass(grassPosition));
         }
     }
 
@@ -34,27 +37,32 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
 
     @Override
     public boolean place(Animal animal) {
-        if(animal == null) return false;
-        if(animal.getPosition() == null) return false;
-        if(!this.canMoveTo(animal.getPosition())) return false;
 
-        if(animal.getPreviousPosition() != null){
-            this.mapHashMap.remove(animal.getPreviousPosition());
+        if (!super.place(animal)) {
+            return false;
         }
 
-        if (this.objectAt(animal.getPosition()) instanceof Grass) {
-            Vector2d grassPosition;
-
-            do {
-                int x = ThreadLocalRandom.current().nextInt(0, this.maxGrassX + 1);
-                int y = ThreadLocalRandom.current().nextInt(0, this.maxGrassY + 1);
-                grassPosition = new Vector2d(x, y);
-            } while (this.isOccupied(grassPosition) || grassPosition.equals(animal.getPosition()));
-
-        }
-        this.mapHashMap.put(animal.getPosition(),animal);
-
+        this.mapHashMap.put(animal.getPosition(), animal);
         return true;
+    }
+
+    @Override
+    public boolean positionChanged(Vector2d oldPosition, Vector2d newPosition){
+            if (this.objectAt(newPosition) instanceof Grass) {
+                this.mapHashMap.remove(newPosition);
+                Vector2d grassPosition;
+
+
+                do {
+                    int x = ThreadLocalRandom.current().nextInt(0, this.maxGrassX + 1);
+                    int y = ThreadLocalRandom.current().nextInt(0, this.maxGrassY + 1);
+                    grassPosition = new Vector2d(x, y);
+
+                } while (this.isOccupied(grassPosition));
+
+                this.mapHashMap.put(grassPosition,new Grass(grassPosition));
+            }
+        return super.positionChanged(oldPosition,newPosition);
     }
 
     public  Vector2d lowerLeftDraw(){

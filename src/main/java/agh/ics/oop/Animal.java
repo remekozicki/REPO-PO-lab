@@ -1,21 +1,22 @@
 package agh.ics.oop;
 
+import java.util.ArrayList;
+
 public class Animal extends AbstractWorldMapElement{
     
     public MapDirection getDirection() {
         return direction;
     }
 
-    public Vector2d getPreviousPosition() {
-        return previousPosition;
-    }
     public Vector2d getPosition() {
         return this.position;
     }
 
-    private Vector2d previousPosition;
+
     private MapDirection direction = MapDirection.NORTH;
     private final IWorldMap map;
+
+    private final ArrayList<IPositionChangeObserver> observersPosition = new ArrayList<>();
 //never used
     public Animal(IWorldMap map){
         super(new Vector2d(2,2));
@@ -48,19 +49,32 @@ public class Animal extends AbstractWorldMapElement{
              case RIGHT -> this.direction = this.direction.next();
              case LEFT -> this.direction = this.direction.previos();
              default -> {
-                 Vector2d temp = switch (direction) {
+                 Vector2d tempPosition = switch (direction) {
                      case FORWARD -> this.position.add(this.direction.toUnitVector());
                      case BACKWARD -> this.position.subtract(this.direction.toUnitVector());
                      default -> this.position;
                  };
-                 if(this.map.canMoveTo(temp)){
-                    this.previousPosition = this.position;
-                    this.position = temp;
-                    this.map.place(this);
+                 if(this.map.canMoveTo(tempPosition)){
+                    this.positionChanged(this.position,tempPosition);
+                    this.position = tempPosition;
                  }
              }
          }
     }
+
+    public void addObserver(IPositionChangeObserver observer){
+        this.observersPosition.add(observer);
+    }
+    public void removeObserver(IPositionChangeObserver observer){
+        this.observersPosition.remove(observer);
+    }
+
+    void positionChanged(Vector2d oldPosition, Vector2d newPosition){
+        for(IPositionChangeObserver observer: this.observersPosition){
+            observer.positionChanged(oldPosition,newPosition);
+        }
+    }
+
 
 
 }
