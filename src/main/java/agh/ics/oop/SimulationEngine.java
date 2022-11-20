@@ -17,10 +17,8 @@ public class SimulationEngine implements IEngine{
             animalsList.add(new Animal(this.map, newPosition));
 
         for(Animal animal: animalsList){
-            if(this.map.canMoveTo(animal.getPosition())){
-                this.map.place(animal);
-            }
-
+            this.map.place(animal);
+//            animalsList.add(animal);
         }
     }
 

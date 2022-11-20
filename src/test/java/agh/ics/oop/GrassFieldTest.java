@@ -2,9 +2,7 @@ package agh.ics.oop;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class GrassFieldTest {
 
@@ -36,35 +34,43 @@ public class GrassFieldTest {
         assertFalse(grassField.isOccupied(pos));
 
         grassField.place(new Animal(grassField, pos));
-        assertTrue(grassField.isOccupied(pos));
+        assertDoesNotThrow(()-> grassField.isOccupied(pos));
 
     }
 
     @Test
     public void placeTest() {
 
-        GrassField grassField = new GrassField(0);
+        GrassField grassField = new GrassField(6);
+        Vector2d pos1 = new Vector2d(3,5);
+        Vector2d pos2 = new Vector2d(3,5);
+        Vector2d pos3 = new Vector2d(5,4);
+        Vector2d pos4 = new Vector2d(10,-9);
 
-        Vector2d pos1 = new Vector2d(1, 2);
-        Vector2d pos2 = new Vector2d(3, 4);
-        Vector2d pos3 = new Vector2d(-2, -3);
+        Animal animal1 = new Animal(grassField, pos1);
 
-        assertTrue(grassField.place(new Animal(grassField, pos1)));
-        assertFalse(grassField.place(new Animal(grassField, pos1)));
-        assertTrue(grassField.place(new Animal(grassField, pos2)));
-        assertTrue(grassField.place(new Animal(grassField, pos3)));
+
+        assertThrows(IllegalArgumentException.class, () -> grassField.place(null));
+        assertDoesNotThrow(() -> grassField.place(animal1));
+        assertThrows(IllegalArgumentException.class, () -> grassField.place(new Animal(grassField, pos2)));
+        assertDoesNotThrow(() -> grassField.place(new Animal(grassField, pos3)));
+        assertDoesNotThrow(() -> grassField.place(new Animal(grassField, pos4)));
+        assertThrows(IllegalArgumentException.class, () -> grassField.place(new Animal(grassField, null)));
 
     }
 
     @Test
     public void canMoveToTest() {
 
-        GrassField grassField = new GrassField(0);
+        GrassField grassField = new GrassField(12);
+        Vector2d pos1 = new Vector2d(3,5);
+        Animal animal1 = new Animal(grassField, pos1);
 
-        grassField.place(new Animal(grassField, new Vector2d(3, 4)));
+        assertDoesNotThrow(() -> grassField.canMoveTo(new Vector2d(45,2)));
+        assertDoesNotThrow(() -> grassField.canMoveTo(new Vector2d(21,2)));
 
-        assertTrue(grassField.canMoveTo(new Vector2d(1, 2)));
-        assertFalse(grassField.canMoveTo(new Vector2d(3, 4)));
+        grassField.place(animal1);
+        assertFalse(grassField.canMoveTo(pos1));
     }
 
 }

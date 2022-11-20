@@ -7,6 +7,8 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
     private final int maxGrassY;
     private final int maxGrassX;
 
+    protected final MapBoundary mapBoundary = new MapBoundary();
+
 
 
     public GrassField(int numberOfGrass) {
@@ -36,18 +38,16 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public void place(Animal animal) {
 
-        if (!super.place(animal)) {
-            return false;
-        }
+        super.place(animal);
 
         this.mapHashMap.put(animal.getPosition(), animal);
-        return true;
+        this.mapBoundary.addWorldMapElement(animal);
     }
 
     @Override
-    public boolean positionChanged(Vector2d oldPosition, Vector2d newPosition){
+    public boolean positionChanged(Object object, Vector2d oldPosition, Vector2d newPosition){
             if (this.objectAt(newPosition) instanceof Grass) {
                 this.mapHashMap.remove(newPosition);
                 Vector2d grassPosition;
@@ -62,7 +62,7 @@ public class GrassField extends AbstractWorldMap implements IWorldMap{
 
                 this.mapHashMap.put(grassPosition,new Grass(grassPosition));
             }
-        return super.positionChanged(oldPosition,newPosition);
+        return super.positionChanged(object, oldPosition,newPosition);
     }
 
     public  Vector2d lowerLeftDraw(){

@@ -2,9 +2,7 @@ package agh.ics.oop;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RectangularMapTest {
 
@@ -34,9 +32,9 @@ public class RectangularMapTest {
 
         RectangularMap rectangularMap = new RectangularMap(10, 20);
 
-        assertTrue(rectangularMap.place(new Animal(rectangularMap, new Vector2d(3, 3))));
-        assertFalse(rectangularMap.place(new Animal(rectangularMap, new Vector2d(3, 3))));
-        assertFalse(rectangularMap.place(new Animal(rectangularMap, new Vector2d(10, 20))));
+        assertDoesNotThrow(()->rectangularMap.place(new Animal(rectangularMap, new Vector2d(3, 3))));
+        assertThrows(IllegalArgumentException.class, ()-> rectangularMap.place(new Animal(rectangularMap, new Vector2d(3, 3))));
+        assertThrows(IllegalArgumentException.class, ()->rectangularMap.place(new Animal(rectangularMap, new Vector2d(10, 20))));
 
     }
 
@@ -45,11 +43,11 @@ public class RectangularMapTest {
 
         RectangularMap rectangularMap = new RectangularMap(10, 20);
 
-        assertTrue(rectangularMap.canMoveTo(new Vector2d(4, 4)));
-        assertFalse(rectangularMap.canMoveTo(new Vector2d(11, 2)));
+        assertDoesNotThrow(()->rectangularMap.canMoveTo(new Vector2d(4, 4)));
+        assertThrows(IllegalArgumentException.class, ()-> rectangularMap.canMoveTo(new Vector2d(11, 2)));
 
         rectangularMap.place(new Animal(rectangularMap, new Vector2d(5, 5)));
-        assertFalse(rectangularMap.canMoveTo(new Vector2d(5, 5)));
+        assertThrows(IllegalArgumentException.class, ()-> rectangularMap.canMoveTo(new Vector2d(5, 5)));
 
     }
 

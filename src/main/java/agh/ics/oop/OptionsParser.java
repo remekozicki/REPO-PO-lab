@@ -16,7 +16,7 @@ public class OptionsParser {
         return counter;
     }
 
-    MoveDirection[] parse(String[] args) {
+    public MoveDirection[] parse(String[] args) {
         MoveDirection[] newArr = new MoveDirection[findLenght(args, checkArray)];
         int i = 0;
         for (String direction : args) {
@@ -38,6 +38,7 @@ public class OptionsParser {
                     newArr[i] = MoveDirection.LEFT;
                     i++;
                 }
+                default -> throw new IllegalArgumentException(direction + " is not legal direction specification");
 
             }
         }

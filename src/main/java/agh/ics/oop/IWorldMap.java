@@ -25,7 +25,7 @@ public interface IWorldMap {
      *            The animal to place on the map.
      * @return True if the animal was placed. The animal cannot be placed if the map is already occupied.
      */
-    public boolean place(Animal animal);
+    public void place(Animal animal);
 
     /**
      * Return true if given position on the map is occupied. Should not be

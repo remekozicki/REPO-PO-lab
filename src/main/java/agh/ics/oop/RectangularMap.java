@@ -29,7 +29,12 @@ public class RectangularMap extends AbstractWorldMap implements IWorldMap{
 
     @Override
     public boolean canMoveTo(Vector2d position){
-        return ((position.precedes(this.upperRight) && position.follows(this.lowerLeft)) && !isOccupied(position));
+//        return ((position.precedes(this.upperRight) && position.follows(this.lowerLeft)) && !isOccupied(position));
+        if ((position.precedes(this.upperRight) && position.follows(this.lowerLeft)) && !isOccupied(position)){
+            return true;
+        }else{
+            throw new IllegalArgumentException("poza mapa");
+        }
     }
 
     public boolean isInside(Vector2d position){
@@ -37,23 +42,16 @@ public class RectangularMap extends AbstractWorldMap implements IWorldMap{
     }
 
     @Override
-    public boolean place(Animal animal) {
+    public void place(Animal animal) {
 
-        if(!super.place(animal)){
-            return false;
-        }
+        super.place(animal);
 
         if(!canMoveTo(animal.getPosition())){
             animal.removeObserver(this);
-            return false;
+            throw new IllegalArgumentException("Object can't be placed on position " + animal.getPosition() + ". It is outside the world borders.");
         }
-
-
         this.mapHashMap.put(animal.getPosition(),animal);
 //        System.out.println(mapHashMap);
-
-
-        return true;
     }
     @Override
     public Object objectAt(Vector2d position) {
