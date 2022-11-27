@@ -21,5 +21,7 @@ abstract public class AbstractMoveWorldMapElement extends AbstractWorldMapElemen
         }
     }
 
+    public abstract void move(MoveDirection direction);
+
 
 }

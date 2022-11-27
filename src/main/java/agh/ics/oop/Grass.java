@@ -1,8 +1,7 @@
 package agh.ics.oop;
 
 public class Grass extends AbstractWorldMapElement{
-
-    private Vector2d position;
+    String imageBasePath = "src/main/resources/";
 
     public Grass(Vector2d position) {
         super(position);
@@ -11,4 +10,17 @@ public class Grass extends AbstractWorldMapElement{
     public String toString(){
         return "*";
     }
+
+    @Override
+    public String getImageResource() {
+        return imageBasePath + "grass.png";
+
+    }
+
+    @Override
+    public String toStringRepresentation() {
+        return "T " + this.position.toString();
+
+    }
+
 }

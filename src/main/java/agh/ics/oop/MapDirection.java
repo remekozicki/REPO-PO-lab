@@ -38,4 +38,8 @@ public enum MapDirection {
             case EAST -> new Vector2d(1,0);
         };
     }
+
+    public String toCordsString(){
+        return this.name().substring(0,1);
+    }
 }

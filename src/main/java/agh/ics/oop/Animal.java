@@ -3,7 +3,9 @@ package agh.ics.oop;
 import java.util.ArrayList;
 
 public class Animal extends AbstractMoveWorldMapElement{
-    
+    String imageBasePath = "src/main/resources/";
+
+
     public MapDirection getDirection() {
         return direction;
     }
@@ -28,22 +30,32 @@ public class Animal extends AbstractMoveWorldMapElement{
 
     @Override
     public String toString(){
-
-        String toPrint = switch (this.direction){
-            case NORTH -> "N";
-            case EAST -> "E";
-            case WEST -> "W";
-            case SOUTH -> "S";
-        };
-
-        return toPrint;
-
+        return this.direction.toCordsString();
     }
+
+//    @Override
+//    public String toString(){
+//
+//        String toPrint = switch (this.direction){
+//            case NORTH -> "N";
+//            case EAST -> "E";
+//            case WEST -> "W";
+//            case SOUTH -> "S";
+//        };
+//
+//        return toPrint;
+//
+//    }
+
+    public String toStringRepresentation(){
+        return "A " + this.direction.toCordsString() + " " + this.position.toString();
+    }
+
     boolean isAt(Vector2d position){
         return position.equals(position);
     }
 
-     void move(MoveDirection direction){
+     public void move(MoveDirection direction){
          switch (direction) {
              case RIGHT -> this.direction = this.direction.next();
              case LEFT -> this.direction = this.direction.previos();
@@ -59,5 +71,17 @@ public class Animal extends AbstractMoveWorldMapElement{
                  }
              }
          }
+    }
+
+    @Override
+    public String getImageResource(){
+
+        String imageDirection = switch ((this.getDirection())){
+            case NORTH -> "up.png";
+            case EAST -> "right.png";
+            case WEST -> "left.png";
+            case SOUTH -> "down.png";
+        };
+        return  imageBasePath + imageDirection;
     }
 }
